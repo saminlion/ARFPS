@@ -19,8 +19,7 @@ public class csGun : MonoBehaviour
     {
         shootingDelayPrivate = shootingDelay;
 
-        gun = GameObject.FindGameObjectWithTag("Gun");
-
+        gun = this.gameObject;
 
         firePos = gun.GetComponentInChildren<GameObject>();
             
