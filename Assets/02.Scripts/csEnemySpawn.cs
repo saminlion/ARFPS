@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Vuforia;
 
 public class csEnemySpawn : MonoBehaviour
 {
     public GameObject enemy;
-    public int enemyMaxCount = 10;
-    int enemyCount = 0;
+
     Bounds bound;
     Vector3 randomPos;
     Vector3 nextPos = Vector3.zero;
@@ -21,7 +21,7 @@ public class csEnemySpawn : MonoBehaviour
 
     void Start()
     {
-        bound.center = this.transform.position;
+        bound.center = GameManager.Instance.gun[GameManager.Instance.gunIndex].transform.position;
 
         bound.size = new Vector3(100.0f, 100.0f, 100.0f);
         
@@ -44,13 +44,13 @@ public class csEnemySpawn : MonoBehaviour
 
                 nextPos = beforePos;
 
-                enemyCount += 1;
+                GameManager.Instance.enemyCount += 1;
             }
             else
             {
                 nextPos = pointRandomize(beforePos);
             }
-        } while(enemyCount < enemyMaxCount);
+        } while(GameManager.Instance.enemyCount < GameManager.Instance.enemyMaxCount);
     }
 
     // Update is called once per frame
@@ -61,9 +61,12 @@ public class csEnemySpawn : MonoBehaviour
 
     void enemySpawn(Vector3 spawnPoint)
     {
-        if (bound.Contains(spawnPoint))// && bound.SqrDistance(spawnPoint) > distanceMax)
+        float distance = Vector3.Distance(bound.center, spawnPoint);
+
+        if (bound.Contains(spawnPoint) && (distance > distanceMax))
         {
-            Debug.Log(spawnPoint);
+//            Debug.Log("Bound Min Check : " + ); 
+            Debug.Log("Spawn Point Check : " + spawnPoint); 
 
             Instantiate(enemy, spawnPoint, Quaternion.identity);
         }

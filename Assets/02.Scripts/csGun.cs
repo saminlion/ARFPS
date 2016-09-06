@@ -30,7 +30,7 @@ public class csGun : MonoBehaviour
             bulletOrigin = 8;
             bulletUsed = bulletOrigin;
             bulletMax = 400;
-            shootingSpeed = 8.0f;
+            shootingSpeed = 15.0f;
         }
         else if (gun.tag == "Pump")
         {
@@ -38,7 +38,7 @@ public class csGun : MonoBehaviour
             bulletOrigin = 5;
             bulletUsed = bulletOrigin;
             bulletMax = 80;
-            shootingSpeed = 10.0f;
+            shootingSpeed = 20.0f;
         }
         else if (gun.tag == "MG")
         {
@@ -46,7 +46,7 @@ public class csGun : MonoBehaviour
             bulletOrigin = 30;
             bulletUsed = bulletOrigin;
             bulletMax = 600;
-            shootingSpeed = 30.0f;
+            shootingSpeed = 40.0f;
         }
     }
 	
