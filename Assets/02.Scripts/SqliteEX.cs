@@ -92,43 +92,60 @@ public class SqliteEX : MonoBehaviour {
 		//IDataReader reader = dbcmd.ExecuteReader ();
 		///////////////////////////////////////////////////////////////////[Data Read]
 
-//		IDbCommand dbcmd = dbconn.CreateCommand ();
-//		string sqlQuery = "Select * from Subway;";
-//		Debug.Log (sqlQuery);
-//		dbcmd.CommandText = sqlQuery;
-//		IDataReader reader = dbcmd.ExecuteReader ();
+		IDbCommand dbcmd = dbconn.CreateCommand ();
+		string sqlQuery = "Select * from Subway;";
+		Debug.Log (sqlQuery);
+		dbcmd.CommandText = sqlQuery;
+		IDataReader reader = dbcmd.ExecuteReader ();
 		//Data Updata
 		//IDataReader reader = dbcmd.ExecuteNonQuery ();
 
-//		int num = 0;
-//
-//	    while (reader.Read())
-//	    {
-//			int numID = reader.GetInt32 (0);
-//			char Name = reader.GetChar (1);
-//			double X = reader.GetDouble (2);
-//			double Y = reader.GetDouble (3);
-//		bool check = reader.GetBoolean (4);
-//
-//			if (check) {
-//				num++;
-//			}
-//			
-//		}
+		//SqliteSelect sheets = new SqliteSelect ();
+		//SqliteSelect.sheets.Add (SqliteSelect.sheet_temp);
+		int num = 0;
+	    while (reader.Read())
+	    {
+
+		SqliteSelect.Param _param = new SqliteSelect.Param ();
+
+		_param.ID = reader.GetInt32 (0);
+		_param.Name = reader.GetString (1);
+		_param.Line = reader.GetString (2);
+		_param.X_Axis = reader.GetDouble (3);
+		_param.Y_Axis = reader.GetDouble (4);
+		_param.Clear = reader.GetInt32 (5);
+			//Debug.Log (test.ID + " " + test.Name + " " +test.Line + " " + test.X_Axis + " " + test.Y_Axis + " " + test.Clear);
+
+		SqliteSelect.Params.Add (_param);
+			_param = null;
+			//Debug.Log (SqliteSelect.sheets[0].list[num].ID + " " + SqliteSelect.sheets[0].list[num].Name + " " +SqliteSelect.sheets[0].list[num].Line + " " + SqliteSelect.sheets[0].list[num].X_Axis + " " + SqliteSelect.sheets[0].list[num].Y_Axis + " " + SqliteSelect.sheets[0].list[num].Clear);
+			num++;
+		}
+
 //
 //		Debug.Log (num);
 	//////////////////////////////////////
+	
+		for(int i=0; i<SqliteSelect.Params.Count; i++){
+		//GameObject sphere = Resources.Load ("Sphere") as GameObject;
+		Debug.Log ((float)SqliteSelect.Params [i].ID);
+		//Vector3 pos = new Vector3 (((float)SqliteSelect.sheets [0].list [i].X_Axis - 37)*1000, ((float)SqliteSelect.sheets [0].list [i].Y_Axis - 127)*1000, 0.0f);
+		//sphere.transform.position = pos;
 
+		//Instantiate(Resources.Load("Sphere"), pos,Quaternion.identity);
+		}
 		///////////////////////////////////////////////////////////////////[Data Read]
 
         ///////////////////////////////////////////////////////////////////[DB Connection Close]
-        //reader.Close();
-//        reader = null;
-//		dbcmd.Dispose();
-//		dbcmd = null;
+        reader.Close();
+        reader = null;
+		dbcmd.Dispose();
+		dbcmd = null;
         dbconn.Close();
         dbconn = null;
         ///////////////////////////////////////////////////////////////////[DB Connection Close]
+
+
 
     }
 
