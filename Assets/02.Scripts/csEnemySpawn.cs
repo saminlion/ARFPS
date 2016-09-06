@@ -10,8 +10,8 @@ public class csEnemySpawn : MonoBehaviour
     Vector3 randomPos;
     Vector3 nextPos = Vector3.zero;
     Vector3 beforePos = Vector3.zero;
-    public Renderer rend;
     BoxCollider boxCol;
+    public float distanceMax = 3.0f;
 
     // Use this for initialization
     void Awake()
@@ -28,7 +28,6 @@ public class csEnemySpawn : MonoBehaviour
         nextPos = pointRandomize(beforePos);
 
         StartCoroutine("EnemySpawn");
-
     }
 
     IEnumerator EnemySpawn()
@@ -62,11 +61,11 @@ public class csEnemySpawn : MonoBehaviour
 
     void enemySpawn(Vector3 spawnPoint)
     {
-        if (bound.Contains(spawnPoint))
+        if (bound.Contains(spawnPoint))// && bound.SqrDistance(spawnPoint) > distanceMax)
         {
             Debug.Log(spawnPoint);
 
-            Instantiate(enemy, spawnPoint, Quaternion.Euler(0, 180.0f, 0.0f));
+            Instantiate(enemy, spawnPoint, Quaternion.identity);
         }
     }
 
