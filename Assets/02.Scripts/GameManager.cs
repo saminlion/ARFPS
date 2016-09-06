@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject[] gun;
     private ButtonManager btnManager;
     public float playerHealth = 100.0f;
+    public int enemyMaxCount = 10;
+    public int enemyCount = 0;
 
     // Use this for initialization
     public static GameManager Instance
@@ -31,9 +33,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        btnManager.gun = gun;
-
-        
+        btnManager.gun = gun;        
     }
 
     // Update is called once per frame

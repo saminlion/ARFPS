@@ -6,13 +6,16 @@ public class csEnemy : MonoBehaviour
     EnemyState enemyState;
 
     private Animator eAnim;
-
     public Vector3 eScaleOrigin = new Vector3(3, 3, 3);
     public Vector3 eScaleMidddle = new Vector3(10, 10, 10);
     public Vector3 eScaleFinal = new Vector3(50, 50, 50);
     public float eHealth = 100.0f;
     public float eAttack = 10.0f;
     public bool oneTime = false;
+    public float scaleM2F = 1.5f;
+    public bool canAttack = false;
+    public float attackDelay = 2.0f;
+    private float attackDelayPrivate = 0.0f;
 
     // Use this for initialization
     void Awake()
@@ -20,11 +23,12 @@ public class csEnemy : MonoBehaviour
         transform.LookAt(GameManager.Instance.gun[GameManager.Instance.gunIndex].transform.position);
         transform.localScale = eScaleOrigin;
         eAnim = GetComponent<Animator>();
+
     }
 
     void Start()
     {
-
+        attackDelayPrivate = attackDelay;
     }
 
     // Update is called once per frame
@@ -65,7 +69,27 @@ public class csEnemy : MonoBehaviour
                 enemyState = EnemyState.IDLE;
 
                 ChangeEnemyState(enemyState);
+
+                canAttack = true;
             }
+        }
+
+        if (enemyState == EnemyState.IDLE && canAttack)
+        {
+            attackDelayPrivate -= Time.deltaTime;
+
+            if (attackDelayPrivate <= 0)
+            {
+                ChangeEnemyState(EnemyState.ATTAK);
+                attackDelayPrivate = attackDelay;
+            }
+        }
+
+        if (eHealth <= 0)
+        {
+            ChangeEnemyState(EnemyState.DEATH);
+            GameManager.Instance.enemyCount -= 1;
+            Destroy(this.gameObject);
         }
     }
 
@@ -74,8 +98,60 @@ public class csEnemy : MonoBehaviour
         return eAnim.GetCurrentAnimatorStateInfo(0).length > eAnim.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
 
-    void ChangeEnemyState(EnemyState eS)
+    //    IEnumerator StateCoroutines(EnemyState es)
+    //    {
+    //        while (es == EnemyState.WALK)
+    //        {
+    //            transform.localScale = Vector3.Lerp(transform.localScale, eScaleMidddle, Time.deltaTime);
+    //
+    //            float distanceMiddle = Vector3.Distance(transform.localScale, eScaleMidddle);
+    //
+    //            if (distanceMiddle < 0.3f)
+    //            {
+    //                transform.localScale = eScaleMidddle;
+    //
+    //                es = EnemyState.RUN;
+    //            }
+    //        }
+    //
+    //        while (es == EnemyState.RUN)
+    //        {
+    //            transform.localScale = Vector3.Lerp(transform.localScale, eScaleFinal, Time.deltaTime * scaleM2F);
+    //
+    //            float distanceFinal = Vector3.Distance(transform.localScale, eScaleFinal);
+    //
+    //            if (distanceFinal < 0.3f)
+    //            {
+    //                transform.localScale = eScaleFinal;
+    //
+    //                es = EnemyState.IDLE;
+    //            }
+    //        }
+    //
+    //        while (es == EnemyState.ATTAK)
+    //        {
+    //
+    //        }
+    //
+    //        while (es == EnemyState.DAMAGE)
+    //        {
+    //
+    //        }
+    //
+    //        while (es == EnemyState.DEATH)
+    //        {
+    //
+    //        }
+    //
+    //        ChangeEnemyState(es);
+    //
+    //        yield return null;
+    //    }
+
+    public void ChangeEnemyState(EnemyState eS)
     {
+//        StopAllCoroutines();
+
         switch (eS)
         {
             case EnemyState.IDLE:
@@ -84,25 +160,31 @@ public class csEnemy : MonoBehaviour
 
             case EnemyState.WALK:
                 eAnim.SetTrigger("Walk");
+//                enemyState = EnemyState.WALK;
                 break;
 
             case EnemyState.RUN:
                 eAnim.SetTrigger("Run");
+//                enemyState = EnemyState.RUN;
                 break;
 
             case EnemyState.ATTAK:
                 eAnim.SetTrigger("Attack");
                 GameManager.Instance.playerHealth -= 1.0f;
+//                enemyState = EnemyState.ATTAK;
                 break;
 
             case EnemyState.DAMAGE:
                 eAnim.SetTrigger("Damage");
-                eHealth -= 1.0f;
                 break;
 
             case EnemyState.DEATH:
                 eAnim.SetTrigger("Death");
+//                enemyState = EnemyState.DEATH;
                 break;
         }
+
+//        StartCoroutine("StateCoroutines", enemyState);
+
     }
 }
