@@ -25,6 +25,7 @@ public static class SqliteSelect {
 		public double X_Axis;
 		public double Y_Axis;
 		public int Clear;
+		public int SameStation;
 	}
 
 

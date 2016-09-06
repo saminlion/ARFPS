@@ -4,12 +4,12 @@ using System.Collections;
 
 public class ButtonManager : MonoBehaviour
 {
-    private csGun gun;
+    [HideInInspector]
+    public GameObject[] gun;
 
     // Use this for initialization
     void Awake()
     {
-        gun = GameObject.Find("Gun").GetComponent<csGun>();
     }
 	
     // Update is called once per frame
@@ -20,11 +20,23 @@ public class ButtonManager : MonoBehaviour
 
     public void Reload()
     {
-        
+        for (int i = 0; i < gun.Length; ++i)
+        {
+            if (i == GameManager.Instance.gunIndex)
+            {
+                gun[i].GetComponent<csGun>().Reloading();
+            }
+        }
     }
 
     public void Shoot()
     {
-        gun.Shooting();
+        for (int i = 0; i < gun.Length; ++i)
+        {
+            if (i == GameManager.Instance.gunIndex)
+            {
+                gun[i].GetComponent<csGun>().Shooting();
+            }
+        }
     }
 }

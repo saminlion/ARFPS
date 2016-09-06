@@ -2,13 +2,18 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class NewGPSScript : MonoBehaviour {
+public enum LocationState{
+	Disabled,
+	TimedOut,
+	Failed,
+	Enabled
+}
+
+public class MyGPSScript : MonoBehaviour {
 	//public float targetLat;
 	//public float dLon;
 	//private Gyroscope gyro;
 
-	public Text mylatitude;
-	public Text mylongitude;
 	//public Text mylocation;
 	// Approximate radius of the earth (in kilometers)
 	const float EARTH_RADIUS = 6371;
@@ -28,7 +33,13 @@ public class NewGPSScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
+
+
+
+	}
+
+	void Update(){
 		state = LocationState.Disabled;
 		latitude = 0f;
 		longitude = 0f;
@@ -39,24 +50,13 @@ public class NewGPSScript : MonoBehaviour {
 			latitude = Input.location.lastData.latitude;
 			longitude = Input.location.lastData.longitude;
 
-			mylatitude.text = "" + latitude;
-			mylongitude.text = "" + longitude;
 			//mylocation.text = "" + LocationData.sheets[0].list[3].전철역명;
-			//Debug.Log ();
+			//Debug.Log (latitude + "  " + longitude);
 
-			Vector3 pos2 = new Vector3 ((longitude - 126) * 100, (latitude - 36) * 100, -5.0f);
+			Vector3 pos2 = new Vector3 ((longitude - 126) * 100, (latitude - 36) * 100, -0.5f);
 			transform.position = pos2;
 		}
-
-
 	}
-
-	public void SetPosition(){
-		Vector3 pos2 = new Vector3 ((longitude - 126) * 100, (latitude - 36) * 100, -5.0f);
-		transform.position = pos2;
-	}
-
-
 	/*
 	float bearingPointer(ref float lastLatitude,ref float lastLongitude){
 
