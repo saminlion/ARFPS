@@ -14,6 +14,7 @@ public class SqliteEX : MonoBehaviour
 
     public GameObject Cube;
 	public GameObject Sphare;
+	public GameObject ClearSphare;
     public GameObject World;
 
 	public GameObject MyPos;
@@ -168,7 +169,14 @@ public class SqliteEX : MonoBehaviour
             Vector3 pos = new Vector3(((float)SqliteSelect.Params[i].X_Axis - 36) * 100, ((float)SqliteSelect.Params[i].Y_Axis - 126) * 100, 0.0f);
             //sphere.transform.position = pos;
 		GameObject g;
-		if(SqliteSelect.Params[i].SameStation  == 1){
+		if(SqliteSelect.Params[i].Clear == 1){
+			g = Instantiate(ClearSphare, pos, Quaternion.identity) as GameObject;
+
+			g.transform.parent = World.transform;
+			g.name = i + " " + SqliteSelect.Params[i].Name;
+			g.GetComponentInChildren<TextMesh>().text = SqliteSelect.Params[i].Name;
+		}
+		else if(SqliteSelect.Params[i].SameStation  == 1){
 			g = Instantiate(Sphare, pos, Quaternion.identity) as GameObject;
 
 			g.transform.parent = World.transform;
@@ -242,7 +250,9 @@ public class SqliteEX : MonoBehaviour
 
 	//
 
-		GameObject Mypos = Instantiate(MyPos, new Vector3(100f,150f,-0.5f), Quaternion.identity) as GameObject;
+		//GameObject Mypos = Instantiate(MyPos, new Vector3(100f,150f,-0.5f), Quaternion.identity) as GameObject;
+		MyPos.transform.position = new Vector3 (100f, 150f, -0.5f);
+		MyPos.transform.rotation = new Quaternion (0f, 90f, 0f, 0f);
 //	state = LocationState.Disabled;
 //	latitude = 0f;
 //	longitude = 0f;
