@@ -252,7 +252,7 @@ public class SqliteEX : MonoBehaviour
 
 		//GameObject Mypos = Instantiate(MyPos, new Vector3(100f,150f,-0.5f), Quaternion.identity) as GameObject;
 		MyPos.transform.position = new Vector3 (100f, 150f, -0.5f);
-		MyPos.transform.rotation = new Quaternion (0f, 90f, 0f, 0f);
+		MyPos.transform.Rotate(0f, 90f, -45f);
 //	state = LocationState.Disabled;
 //	latitude = 0f;
 //	longitude = 0f;
