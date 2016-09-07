@@ -74,7 +74,7 @@ public class csEnemySpawn : MonoBehaviour
 
     Vector3 pointRandomize(Vector3 firstPos)
     {   
-        Vector3 checkPos = new Vector3(Random.Range(bound.min.x, bound.max.x), transform.position.y, Random.Range(bound.min.z, bound.max.z));
+        Vector3 checkPos = new Vector3(Random.Range(bound.min.x, bound.max.x), transform.position.y - 10f, Random.Range(bound.min.z, bound.max.z));
 
         if (firstPos == checkPos)
         {
