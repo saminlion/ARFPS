@@ -55,8 +55,8 @@ public class csCameraMove : MonoBehaviour {
 			if (Vector2.Distance (Input.GetTouch (0).position, Input.GetTouch (1).position) > initTouchDist) {
 				//Debug.Log ("확대");
 				Vector3 pos = transform.position;
-				pos.z = 130;
-				if (transform.position.z >= 130) {
+				pos.z = 4;
+				if (transform.position.z >= 4) {
 					transform.position = pos;
 					//return;
 				} else {
@@ -67,8 +67,8 @@ public class csCameraMove : MonoBehaviour {
 			if (Vector2.Distance (Input.GetTouch (0).position, Input.GetTouch (1).position) < initTouchDist) {
 				//Debug.Log ("축소");
 				Vector3 pos = transform.position;
-				pos.z = 100;
-				if (transform.position.z <= 100) {
+				pos.z = -15;
+				if (transform.position.z <= -15) {
 					transform.position = pos;
 					//return;
 				} else {
