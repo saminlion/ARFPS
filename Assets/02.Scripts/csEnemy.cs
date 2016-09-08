@@ -162,6 +162,7 @@ public class csEnemy : MonoBehaviour
         if (other.gameObject.tag == "PistolBullet")
         {
             eHealth -= pistolBodyDMG;
+            Debug.Log("Pistol Body");
         }
         else if (other.gameObject.tag == "PumpBullet")
         {

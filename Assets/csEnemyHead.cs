@@ -15,6 +15,7 @@ public class csEnemyHead : MonoBehaviour
         if (other.gameObject.tag == "PistolBullet")
         {
             enemy.eHealth -= enemy.pistolHeadDMG;
+            Debug.Log("Pistol Head");
         }
         else if (other.gameObject.tag == "PumpBullet")
         {
