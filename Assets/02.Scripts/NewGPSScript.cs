@@ -56,7 +56,17 @@ public class NewGPSScript : MonoBehaviour {
 		transform.position = pos2;
 	}
 
+	void Update(){
+		if(Input.location.isEnabledByUser){
+			Input.location.Start();
 
+			latitude = Input.location.lastData.latitude;
+			longitude = Input.location.lastData.longitude;
+
+			mylatitude.text = "" + latitude;
+			mylongitude.text = "" + longitude;
+		}
+	}
 	/*
 	float bearingPointer(ref float lastLatitude,ref float lastLongitude){
 
