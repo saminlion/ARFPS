@@ -16,7 +16,7 @@ public class csEnemy : MonoBehaviour
     public bool canAttack = false;
     public float attackDelay = 2.0f;
     private float attackDelayPrivate = 0.0f;
-
+   
     // Use this for initialization
     void Awake()
     {
@@ -170,7 +170,7 @@ public class csEnemy : MonoBehaviour
 
             case EnemyState.ATTAK:
                 eAnim.SetTrigger("Attack");
-                GameManager.Instance.playerHealth -= 1.0f;
+                GameManager.Instance.playerHealth -= eAttack;
 //                enemyState = EnemyState.ATTAK;
                 break;
 
