@@ -27,7 +27,7 @@ public class GyroCamera4 : MonoBehaviour
 
     void gyroUpdate()
     {
-        transform.Rotate(gyro.rotationRateUnbiased.x, -gyro.rotationRateUnbiased.y, 0);
+        this.transform.Rotate(gyro.rotationRateUnbiased.x, -gyro.rotationRateUnbiased.y, 0);
 //        Quaternion transquat = transform.rotation;
 //        transquat.w = gyro.attitude.w;
 //

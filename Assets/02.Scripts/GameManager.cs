@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public float playerHealth = 100.0f;
     public int enemyMaxCount = 10;
     public int enemyCount = 0;
+    public GameObject character;
 
     // Use this for initialization
     public static GameManager Instance
@@ -28,6 +29,10 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+//        //무한모드
+//        if (SqliteSelect)
+//        enemyMaxCount = (int)Mathf.Infinity;
+
         btnManager = GameObject.Find("ButtonManager").GetComponent<ButtonManager>();
     }
 
@@ -41,6 +46,4 @@ public class GameManager : MonoBehaviour
     {
 	   
     }
-
-
 }

@@ -16,14 +16,23 @@ public class csEnemy : MonoBehaviour
     public bool canAttack = false;
     public float attackDelay = 2.0f;
     private float attackDelayPrivate = 0.0f;
-   
+
+    [Header("Gun Damage")]
+    public float pistolHeadDMG = 40.0f;
+    public float pistolBodyDMG = 15.0f;
+
+    public float pumpHeadDMG = 60.0f;
+    public float pumpBodyDMG = 30.0f;
+
+    public float mgHeadDMG = 50.0f;
+    public float mgBodyDMG = 10.0f;
+
     // Use this for initialization
     void Awake()
     {
-        transform.LookAt(GameManager.Instance.gun[GameManager.Instance.gunIndex].transform.position);
+        transform.LookAt(GameManager.Instance.character.transform.position);
         transform.localScale = eScaleOrigin;
         eAnim = GetComponent<Animator>();
-
     }
 
     void Start()
@@ -147,6 +156,22 @@ public class csEnemy : MonoBehaviour
     //
     //        yield return null;
     //    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "PistolBullet")
+        {
+            eHealth -= pistolBodyDMG;
+        }
+        else if (other.gameObject.tag == "PumpBullet")
+        {
+            eHealth -= pumpBodyDMG;
+        }
+        else if (other.gameObject.tag == "MGBullet")
+        {
+            eHealth -= mgBodyDMG;
+        }
+    }
 
     public void ChangeEnemyState(EnemyState eS)
     {
