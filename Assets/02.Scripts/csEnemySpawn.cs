@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Vuforia;
 
 public class csEnemySpawn : MonoBehaviour
 {
@@ -11,7 +10,11 @@ public class csEnemySpawn : MonoBehaviour
     Vector3 nextPos = Vector3.zero;
     Vector3 beforePos = Vector3.zero;
     BoxCollider boxCol;
-    public float distanceMax = 3.0f;
+    public float playerDistanceMax = 150.0f;
+    public float enemyDistanceMax = 50.0f;
+    public GameObject character;
+    float playerDistance;
+    float enemyDistance;
 
     // Use this for initialization
     void Awake()
@@ -21,23 +24,27 @@ public class csEnemySpawn : MonoBehaviour
 
     void Start()
     {
-        bound.center = GameManager.Instance.gun[GameManager.Instance.gunIndex].transform.position;
+        bound.center = character.transform.position;
 
-        bound.size = new Vector3(100.0f, 100.0f, 100.0f);
+        bound.size = new Vector3(300.0f, 300.0f, 300.0f);
         
         nextPos = pointRandomize(beforePos);
+
+//        distance = Vector3.Distance(character.transform.position, nextPos);
+
+        playerDistance = Mathf.Sqrt(Mathf.Pow((nextPos.x - character.transform.position.x), 2) + Mathf.Pow((nextPos.z - character.transform.position.z), 2));
+        enemyDistance = Vector3.Distance(beforePos, nextPos);
 
         StartCoroutine("EnemySpawn");
     }
 
     IEnumerator EnemySpawn()
     {
-        yield return new WaitForEndOfFrame();
-
         do
         {
-            if (nextPos != beforePos)
+            if (nextPos != beforePos && playerDistance > playerDistanceMax && enemyDistance > enemyDistanceMax)
             {
+                Debug.Log("Distance : " + playerDistance);
                 enemySpawn(nextPos);
 
                 yield return new WaitForSeconds(2.0f);
@@ -46,9 +53,11 @@ public class csEnemySpawn : MonoBehaviour
 
                 GameManager.Instance.enemyCount += 1;
             }
-            else
+            else if (nextPos == beforePos || playerDistance < playerDistanceMax || enemyDistance < enemyDistanceMax)
             {
                 nextPos = pointRandomize(beforePos);
+                playerDistance = Mathf.Sqrt(Mathf.Pow((nextPos.x - character.transform.position.x), 2) + Mathf.Pow((nextPos.z - character.transform.position.z), 2));
+                enemyDistance = Vector3.Distance(beforePos, nextPos);
             }
         } while(GameManager.Instance.enemyCount < GameManager.Instance.enemyMaxCount);
     }
@@ -61,13 +70,8 @@ public class csEnemySpawn : MonoBehaviour
 
     void enemySpawn(Vector3 spawnPoint)
     {
-        float distance = Vector3.Distance(bound.center, spawnPoint);
-
-        if (bound.Contains(spawnPoint) && (distance > distanceMax))
+        if (bound.Contains(spawnPoint))
         {
-//            Debug.Log("Bound Min Check : " + ); 
-            Debug.Log("Spawn Point Check : " + spawnPoint); 
-
             Instantiate(enemy, spawnPoint, Quaternion.identity);
         }
     }

@@ -16,6 +16,9 @@ public class csGun : MonoBehaviour
     public int bulletOrigin = 0;
     public int bulletUsed = 0;
     private GameObject gun;
+    public float pistolBulletMax = 40;
+    public float pumpBulletMax = 10;
+    public float mgBulletMax = 120;
 
     // Use this for initialization
     void Awake()
@@ -29,24 +32,24 @@ public class csGun : MonoBehaviour
             GameManager.Instance.gunIndex = 0;
             bulletOrigin = 8;
             bulletUsed = bulletOrigin;
-            bulletMax = 400;
-            shootingSpeed = 15.0f;
+            bulletMax = pistolBulletMax;
+            shootingSpeed = 30.0f;
         }
         else if (gun.tag == "Pump")
         {
             GameManager.Instance.gunIndex = 1;
             bulletOrigin = 5;
             bulletUsed = bulletOrigin;
-            bulletMax = 80;
-            shootingSpeed = 20.0f;
+            bulletMax = pumpBulletMax;
+            shootingSpeed = 40.0f;
         }
         else if (gun.tag == "MG")
         {
             GameManager.Instance.gunIndex = 2;
             bulletOrigin = 30;
             bulletUsed = bulletOrigin;
-            bulletMax = 600;
-            shootingSpeed = 40.0f;
+            bulletMax = mgBulletMax;
+            shootingSpeed = 80.0f;
         }
     }
 	
