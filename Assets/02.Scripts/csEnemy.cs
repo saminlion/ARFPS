@@ -11,19 +11,30 @@ public class csEnemy : MonoBehaviour
     public Vector3 eScaleFinal = new Vector3(50, 50, 50);
     public float eHealth = 100.0f;
     public float eAttack = 10.0f;
-    public bool oneTime = false;
     public float scaleM2F = 1.5f;
     public bool canAttack = false;
     public float attackDelay = 2.0f;
     private float attackDelayPrivate = 0.0f;
-   
+
+    [Header("Gun Damage")]
+    public float pistolHeadDMG = 40.0f;
+    public float pistolBodyDMG = 15.0f;
+
+    public float pumpHeadDMG = 60.0f;
+    public float pumpBodyDMG = 30.0f;
+
+    public float mgHeadDMG = 50.0f;
+    public float mgBodyDMG = 10.0f;
+
+	private bool oneTime = false;
+	private bool oneTimeDeath = false;
+
     // Use this for initialization
     void Awake()
     {
-        transform.LookAt(GameManager.Instance.gun[GameManager.Instance.gunIndex].transform.position);
+        transform.LookAt(GameManager.Instance.character.transform.position);
         transform.localScale = eScaleOrigin;
         eAnim = GetComponent<Animator>();
-
     }
 
     void Start()
@@ -38,7 +49,7 @@ public class csEnemy : MonoBehaviour
         {
             enemyState = EnemyState.WALK;
             oneTime = true;
-            ChangeEnemyState(enemyState);
+			eAnim.SetTrigger("Walk");
         }
 
         if (enemyState == EnemyState.WALK)
@@ -53,7 +64,7 @@ public class csEnemy : MonoBehaviour
 
                 enemyState = EnemyState.RUN;
 
-                ChangeEnemyState(enemyState);
+				eAnim.SetTrigger("Run");
             }
         }
         else if (enemyState == EnemyState.RUN)
@@ -68,7 +79,7 @@ public class csEnemy : MonoBehaviour
 
                 enemyState = EnemyState.IDLE;
 
-                ChangeEnemyState(enemyState);
+				eAnim.SetTrigger("Idle");
 
                 canAttack = true;
             }
@@ -80,16 +91,17 @@ public class csEnemy : MonoBehaviour
 
             if (attackDelayPrivate <= 0)
             {
-                ChangeEnemyState(EnemyState.ATTAK);
-                attackDelayPrivate = attackDelay;
+				eAnim.SetTrigger("Attack");
+				attackDelayPrivate = attackDelay;
             }
         }
 
-        if (eHealth <= 0)
+		if (eHealth <= 0 && !oneTimeDeath)
         {
-            ChangeEnemyState(EnemyState.DEATH);
+			oneTimeDeath = true;
+			eAnim.SetTrigger("Death");
             GameManager.Instance.enemyCount -= 1;
-            Destroy(this.gameObject);
+			Destroy(this.gameObject, 2.0f);
         }
     }
 
@@ -98,93 +110,31 @@ public class csEnemy : MonoBehaviour
         return eAnim.GetCurrentAnimatorStateInfo(0).length > eAnim.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
 
-    //    IEnumerator StateCoroutines(EnemyState es)
-    //    {
-    //        while (es == EnemyState.WALK)
-    //        {
-    //            transform.localScale = Vector3.Lerp(transform.localScale, eScaleMidddle, Time.deltaTime);
-    //
-    //            float distanceMiddle = Vector3.Distance(transform.localScale, eScaleMidddle);
-    //
-    //            if (distanceMiddle < 0.3f)
-    //            {
-    //                transform.localScale = eScaleMidddle;
-    //
-    //                es = EnemyState.RUN;
-    //            }
-    //        }
-    //
-    //        while (es == EnemyState.RUN)
-    //        {
-    //            transform.localScale = Vector3.Lerp(transform.localScale, eScaleFinal, Time.deltaTime * scaleM2F);
-    //
-    //            float distanceFinal = Vector3.Distance(transform.localScale, eScaleFinal);
-    //
-    //            if (distanceFinal < 0.3f)
-    //            {
-    //                transform.localScale = eScaleFinal;
-    //
-    //                es = EnemyState.IDLE;
-    //            }
-    //        }
-    //
-    //        while (es == EnemyState.ATTAK)
-    //        {
-    //
-    //        }
-    //
-    //        while (es == EnemyState.DAMAGE)
-    //        {
-    //
-    //        }
-    //
-    //        while (es == EnemyState.DEATH)
-    //        {
-    //
-    //        }
-    //
-    //        ChangeEnemyState(es);
-    //
-    //        yield return null;
-    //    }
-
-    public void ChangeEnemyState(EnemyState eS)
+    void OnTriggerEnter(Collider other)
     {
-//        StopAllCoroutines();
-
-        switch (eS)
+        if (other.gameObject.tag == "PistolBullet")
         {
-            case EnemyState.IDLE:
-                eAnim.SetTrigger("Idle");
-                break;
+            eHealth -= pistolBodyDMG;
+			eAnim.SetTrigger("Damage");
+			canAttack = false;
+		}
+        else if (other.gameObject.tag == "PumpBullet")
+        {
+            eHealth -= pumpBodyDMG;
+			eAnim.SetTrigger("Damage");
+			canAttack = false;
+			}
+        else if (other.gameObject.tag == "MGBullet")
+        {
+            eHealth -= mgBodyDMG;
+			eAnim.SetTrigger("Damage");
+			canAttack = false;
+			}
 
-            case EnemyState.WALK:
-                eAnim.SetTrigger("Walk");
-//                enemyState = EnemyState.WALK;
-                break;
-
-            case EnemyState.RUN:
-                eAnim.SetTrigger("Run");
-//                enemyState = EnemyState.RUN;
-                break;
-
-            case EnemyState.ATTAK:
-                eAnim.SetTrigger("Attack");
-                GameManager.Instance.playerHealth -= eAttack;
-//                enemyState = EnemyState.ATTAK;
-                break;
-
-            case EnemyState.DAMAGE:
-                eAnim.SetTrigger("Damage");
-                break;
-
-            case EnemyState.DEATH:
-                eAnim.SetTrigger("Death");
-//                enemyState = EnemyState.DEATH;
-                break;
-        }
-
-//        StartCoroutine("StateCoroutines", enemyState);
-
+		if (eAnim.GetCurrentAnimatorStateInfo (0).IsName ("damege")) {
+			if (!AnimatorIsPlaying()) {
+				canAttack = true;
+			}
+		}
     }
 }

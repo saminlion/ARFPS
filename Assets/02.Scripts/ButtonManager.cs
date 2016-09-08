@@ -39,4 +39,26 @@ public class ButtonManager : MonoBehaviour
             }
         }
     }
+
+	public void ChangeGun()
+	{
+		if (GameManager.Instance.gunIndex == 0) {
+			gun [GameManager.Instance.gunIndex + 2].SetActive (false);
+			gun [GameManager.Instance.gunIndex].SetActive (false);
+			gun [GameManager.Instance.gunIndex + 1].SetActive (true);
+			GameManager.Instance.gunIndex = 1;
+		}		else if (GameManager.Instance.gunIndex == 1) {
+			gun [GameManager.Instance.gunIndex - 1].SetActive (false);
+			gun [GameManager.Instance.gunIndex].SetActive (false);
+			gun [GameManager.Instance.gunIndex + 1].SetActive (true);
+			GameManager.Instance.gunIndex = 2;
+		}		else if (GameManager.Instance.gunIndex == 2) {
+			gun [GameManager.Instance.gunIndex - 1].SetActive (false);
+			gun [GameManager.Instance.gunIndex].SetActive (false);
+			gun [GameManager.Instance.gunIndex - 2].SetActive (true);
+			GameManager.Instance.gunIndex = 0;
+		}
+			
+
+	}
 }

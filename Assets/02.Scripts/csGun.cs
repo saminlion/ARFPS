@@ -1,30 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
+using UnityEngine.UI;
 
 public class csGun : MonoBehaviour
 {
-    [Header("Shooting Setup")]
-    public float shootingDelay = 3.0f;
-    public float shootingSpeed = 15.0f;
-    private float shootingDelayPrivate = 0.0f;
-
     [Header("Gun Setup")]
-    public int gunChoose = 0;
-    public GameObject bulletPrefab;
     public GameObject firePos;
+    public int gunChoose = 0;
     public int bulletMax = 300;
     public int bulletOrigin = 0;
     public int bulletUsed = 0;
-    private GameObject gun;
-    public float pistolBulletMax = 40;
-    public float pumpBulletMax = 10;
-    public float mgBulletMax = 120;
+    public int pistolBulletMax = 40;
+    public int pumpBulletMax = 10;
+    public int mgBulletMax = 120;
 
+    private GameObject gun;
+
+    public GameObject bullet;
+	Button btn;
     // Use this for initialization
     void Awake()
     {
-        shootingDelayPrivate = shootingDelay;
-
         gun = this.gameObject;       
 
         if (gun.tag == "Pistol")
@@ -33,7 +30,6 @@ public class csGun : MonoBehaviour
             bulletOrigin = 8;
             bulletUsed = bulletOrigin;
             bulletMax = pistolBulletMax;
-            shootingSpeed = 30.0f;
         }
         else if (gun.tag == "Pump")
         {
@@ -41,7 +37,6 @@ public class csGun : MonoBehaviour
             bulletOrigin = 5;
             bulletUsed = bulletOrigin;
             bulletMax = pumpBulletMax;
-            shootingSpeed = 40.0f;
         }
         else if (gun.tag == "MG")
         {
@@ -49,31 +44,49 @@ public class csGun : MonoBehaviour
             bulletOrigin = 30;
             bulletUsed = bulletOrigin;
             bulletMax = mgBulletMax;
-            shootingSpeed = 80.0f;
         }
     }
 	
     // Update is called once per frame
     void Update()
-    {
-        shootingDelayPrivate -= Time.deltaTime;       
-    }
-
-    public void Shooting()
-    {
-        if (bulletUsed > 0)
-        {
-            GameObject bullet = Instantiate(bulletPrefab, firePos.transform.position, firePos.transform.rotation) as GameObject;
-            bullet.GetComponent<Rigidbody>().AddForce(transform.forward * shootingSpeed, ForceMode.Impulse);
-            bulletUsed -= 1;
-        }
+    {        
+		GameObject state = GameObject.Find ("UI/Image/Text");
+		state.GetComponent<Text> ().text = bulletUsed + " / " + bulletMax;
     }
 
     public void Reloading()
     {
-        //Reloading 
-        bulletMax -= bulletUsed;
+		//Reloading 
+		if (bulletMax > 0 && bulletMax < bulletOrigin) {
+			bulletUsed = bulletMax;
+			bulletMax = 0;
+			return;
+		}
+	
+		if (bulletMax >= bulletOrigin - bulletUsed) {			
+			bulletMax -= bulletOrigin - bulletUsed;
 
-        bulletUsed = bulletOrigin;
+			bulletUsed = bulletOrigin;
+		}
     }
+
+	public void Shooting()
+	{ 
+		if (GameManager.Instance.gunIndex == 2) {
+			return;
+		}
+
+		if (bulletUsed > 0)
+		{
+			bullet.GetComponent<CapsuleCollider>().enabled = true;
+			bulletUsed -= 1;
+
+			Invoke ("ShootingCancled", 0.1f);
+		}  
+	}
+
+	public void ShootingCancled()
+	{ 
+		bullet.GetComponent<CapsuleCollider>().enabled = false;
+	}
 }

@@ -12,7 +12,6 @@ public class csEnemySpawn : MonoBehaviour
     BoxCollider boxCol;
     public float playerDistanceMax = 150.0f;
     public float enemyDistanceMax = 50.0f;
-    public GameObject character;
     float playerDistance;
     float enemyDistance;
 
@@ -24,7 +23,7 @@ public class csEnemySpawn : MonoBehaviour
 
     void Start()
     {
-        bound.center = character.transform.position;
+        bound.center = GameManager.Instance.character.transform.position;
 
         bound.size = new Vector3(300.0f, 300.0f, 300.0f);
         
@@ -32,7 +31,7 @@ public class csEnemySpawn : MonoBehaviour
 
 //        distance = Vector3.Distance(character.transform.position, nextPos);
 
-        playerDistance = Mathf.Sqrt(Mathf.Pow((nextPos.x - character.transform.position.x), 2) + Mathf.Pow((nextPos.z - character.transform.position.z), 2));
+        playerDistance = Mathf.Sqrt(Mathf.Pow((nextPos.x - GameManager.Instance.character.transform.position.x), 2) + Mathf.Pow((nextPos.z - GameManager.Instance.character.transform.position.z), 2));
         enemyDistance = Vector3.Distance(beforePos, nextPos);
 
         StartCoroutine("EnemySpawn");
@@ -56,7 +55,7 @@ public class csEnemySpawn : MonoBehaviour
             else if (nextPos == beforePos || playerDistance < playerDistanceMax || enemyDistance < enemyDistanceMax)
             {
                 nextPos = pointRandomize(beforePos);
-                playerDistance = Mathf.Sqrt(Mathf.Pow((nextPos.x - character.transform.position.x), 2) + Mathf.Pow((nextPos.z - character.transform.position.z), 2));
+                playerDistance = Mathf.Sqrt(Mathf.Pow((nextPos.x - GameManager.Instance.character.transform.position.x), 2) + Mathf.Pow((nextPos.z - GameManager.Instance.character.transform.position.z), 2));
                 enemyDistance = Vector3.Distance(beforePos, nextPos);
             }
         } while(GameManager.Instance.enemyCount < GameManager.Instance.enemyMaxCount);
