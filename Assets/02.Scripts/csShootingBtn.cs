@@ -4,25 +4,25 @@ using System.Collections;
 
 public class csShootingBtn : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-	private bool oneTimePisPump = false;
+    private bool oneTimePisPump = false;
 
-	public csGun Gun;
+    private GameObject[] gun;
+
+    void Awake()
+    {
+        gun = GameManager.Instance.gun;
+    }
 
     public void OnPointerDown(PointerEventData ped)
     { 
-		if (GameManager.Instance.gunIndex != 2) {
-			return;
-		}
-
-		if (Gun.bulletUsed > 0 && !oneTimePisPump)
-		{
-			Gun.bullet.GetComponent<CapsuleCollider>().enabled = true;
-			Gun.bulletUsed -= 1;
-		}  
-	}
+        gun[GameManager.Instance.gunIndex].GetComponent<csGun>().Shooting();
+    }
 
     public void OnPointerUp(PointerEventData ped)
     { 
-		Gun.bullet.GetComponent<CapsuleCollider>().enabled = false;
+        if (gun[GameManager.Instance.gunIndex].GetComponent<csGun>().bullet.GetComponent<CapsuleCollider>().enabled)
+        {
+            gun[GameManager.Instance.gunIndex].GetComponent<csGun>().ShootingCancled();
+        }
     }
 }

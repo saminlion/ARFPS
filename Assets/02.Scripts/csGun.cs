@@ -15,10 +15,14 @@ public class csGun : MonoBehaviour
     public int pumpBulletMax = 10;
     public int mgBulletMax = 120;
 
+    public Animator anim;
+
     private GameObject gun;
 
+    public ParticleSystem particle;
+
     public GameObject bullet;
-	Button btn;
+    Button btn;
     // Use this for initialization
     void Awake()
     {
@@ -50,43 +54,87 @@ public class csGun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {        
-		GameObject state = GameObject.Find ("UI/Image/Text");
-		state.GetComponent<Text> ().text = bulletUsed + " / " + bulletMax;
+        GameObject state = GameObject.Find("UI/Image/Text");
+        state.GetComponent<Text>().text = bulletUsed + " / " + bulletMax;
     }
 
     public void Reloading()
     {
-		//Reloading 
-		if (bulletMax > 0 && bulletMax < bulletOrigin) {
-			bulletUsed = bulletMax;
-			bulletMax = 0;
-			return;
-		}
+        //Reloading 
+        if (bulletMax > 0 && bulletMax < bulletOrigin)
+        {
+            bulletUsed = bulletMax;
+            bulletMax = 0;
+            anim.SetTrigger("Reload");
+            if (GameManager.Instance.gunIndex == 0)
+            {
+                SoundManager.Instance.PlaySFX("Pistol_ClipIn_05");
+            }
+            else if (GameManager.Instance.gunIndex == 1)
+            {
+                SoundManager.Instance.PlaySFX("JackHammer_Reload");
+            }
+            else if (GameManager.Instance.gunIndex == 2)
+            {
+                SoundManager.Instance.PlaySFX("Minigun_Reload_04");
+            }
+            return;
+        }
 	
-		if (bulletMax >= bulletOrigin - bulletUsed) {			
-			bulletMax -= bulletOrigin - bulletUsed;
+        if (bulletMax >= bulletOrigin - bulletUsed)
+        {			
+            bulletMax -= bulletOrigin - bulletUsed;
 
-			bulletUsed = bulletOrigin;
-		}
+            bulletUsed = bulletOrigin;
+
+            anim.SetTrigger("Reload");
+            if (GameManager.Instance.gunIndex == 0)
+            {
+                SoundManager.Instance.PlaySFX("Pistol_ClipIn_05");
+            }
+            else if (GameManager.Instance.gunIndex == 1)
+            {
+                SoundManager.Instance.PlaySFX("JackHammer_Reload");
+            }
+            else if (GameManager.Instance.gunIndex == 2)
+            {
+                SoundManager.Instance.PlaySFX("Minigun_Reload_04");
+            }
+            return;
+        }
     }
 
-	public void Shooting()
-	{ 
-		if (GameManager.Instance.gunIndex == 2) {
-			return;
-		}
+    public void Shooting()
+    { 
+        if (bulletUsed > 0)
+        {
+            anim.SetBool("Shoot", true);
 
-		if (bulletUsed > 0)
-		{
-			bullet.GetComponent<CapsuleCollider>().enabled = true;
-			bulletUsed -= 1;
+            if (GameManager.Instance.gunIndex == 0)
+            {
+                SoundManager.Instance.PlaySFX("Zapper_1p_03");
+            }
+            else if (GameManager.Instance.gunIndex == 1)
+            {
+                SoundManager.Instance.PlaySFX("AntiMaterialRifle_1p_02");
+            }
+            else if (GameManager.Instance.gunIndex == 2)
+            {
+                SoundManager.Instance.PlaySFX("AssaultCanon_1p");
+            }
+            particle.Play();
+            bullet.GetComponent<CapsuleCollider>().enabled = true;
+            bulletUsed -= 1;
+        }  
+    }
 
-			Invoke ("ShootingCancled", 0.1f);
-		}  
-	}
-
-	public void ShootingCancled()
-	{ 
-		bullet.GetComponent<CapsuleCollider>().enabled = false;
-	}
+    public void ShootingCancled()
+    { 
+        anim.SetBool("Shoot", false);
+        if (particle.isPlaying)
+        {
+            particle.Stop();
+        }
+        bullet.GetComponent<CapsuleCollider>().enabled = false;
+    }
 }

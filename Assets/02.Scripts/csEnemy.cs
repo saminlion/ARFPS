@@ -26,8 +26,8 @@ public class csEnemy : MonoBehaviour
     public float mgHeadDMG = 50.0f;
     public float mgBodyDMG = 10.0f;
 
-	private bool oneTime = false;
-	private bool oneTimeDeath = false;
+    private bool oneTime = false;
+    private bool oneTimeDeath = false;
 
     // Use this for initialization
     void Awake()
@@ -45,11 +45,11 @@ public class csEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {     
-        if (eAnim.GetCurrentAnimatorStateInfo(0).IsName("idle02") && !oneTime)
+        if (eAnim.GetCurrentAnimatorStateInfo(0).IsName("idle") && !oneTime)
         {
             enemyState = EnemyState.WALK;
             oneTime = true;
-			eAnim.SetTrigger("Walk");
+            eAnim.SetTrigger("Walk");
         }
 
         if (enemyState == EnemyState.WALK)
@@ -64,7 +64,7 @@ public class csEnemy : MonoBehaviour
 
                 enemyState = EnemyState.RUN;
 
-				eAnim.SetTrigger("Run");
+                eAnim.SetTrigger("Run");
             }
         }
         else if (enemyState == EnemyState.RUN)
@@ -79,7 +79,7 @@ public class csEnemy : MonoBehaviour
 
                 enemyState = EnemyState.IDLE;
 
-				eAnim.SetTrigger("Idle");
+                eAnim.SetTrigger("Idle");
 
                 canAttack = true;
             }
@@ -91,17 +91,17 @@ public class csEnemy : MonoBehaviour
 
             if (attackDelayPrivate <= 0)
             {
-				eAnim.SetTrigger("Attack");
-				attackDelayPrivate = attackDelay;
+                eAnim.SetTrigger("Attack");
+                attackDelayPrivate = attackDelay;
             }
         }
 
-		if (eHealth <= 0 && !oneTimeDeath)
+        if (eHealth <= 0 && !oneTimeDeath)
         {
-			oneTimeDeath = true;
-			eAnim.SetTrigger("Death");
+            oneTimeDeath = true;
+            eAnim.SetTrigger("Death");
             GameManager.Instance.enemyCount -= 1;
-			Destroy(this.gameObject, 2.0f);
+            Destroy(this.gameObject, 2.0f);
         }
     }
 
@@ -115,26 +115,28 @@ public class csEnemy : MonoBehaviour
         if (other.gameObject.tag == "PistolBullet")
         {
             eHealth -= pistolBodyDMG;
-			eAnim.SetTrigger("Damage");
-			canAttack = false;
-		}
+            eAnim.SetTrigger("Damage");
+            canAttack = false;
+        }
         else if (other.gameObject.tag == "PumpBullet")
         {
             eHealth -= pumpBodyDMG;
-			eAnim.SetTrigger("Damage");
-			canAttack = false;
-			}
+            eAnim.SetTrigger("Damage");
+            canAttack = false;
+        }
         else if (other.gameObject.tag == "MGBullet")
         {
             eHealth -= mgBodyDMG;
-			eAnim.SetTrigger("Damage");
-			canAttack = false;
-			}
+            eAnim.SetTrigger("Damage");
+            canAttack = false;
+        }
 
-		if (eAnim.GetCurrentAnimatorStateInfo (0).IsName ("damege")) {
-			if (!AnimatorIsPlaying()) {
-				canAttack = true;
-			}
-		}
+        if (eAnim.GetCurrentAnimatorStateInfo(0).IsName("hitright"))
+        {
+            if (!AnimatorIsPlaying())
+            {
+                canAttack = true;
+            }
+        }
     }
 }

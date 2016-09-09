@@ -7,6 +7,8 @@ public class ButtonManager : MonoBehaviour
     [HideInInspector]
     public GameObject[] gun;
 
+    public GameObject[] gunImages;
+
     // Use this for initialization
     void Awake()
     {
@@ -40,25 +42,37 @@ public class ButtonManager : MonoBehaviour
         }
     }
 
-	public void ChangeGun()
-	{
-		if (GameManager.Instance.gunIndex == 0) {
-			gun [GameManager.Instance.gunIndex + 2].SetActive (false);
-			gun [GameManager.Instance.gunIndex].SetActive (false);
-			gun [GameManager.Instance.gunIndex + 1].SetActive (true);
-			GameManager.Instance.gunIndex = 1;
-		}		else if (GameManager.Instance.gunIndex == 1) {
-			gun [GameManager.Instance.gunIndex - 1].SetActive (false);
-			gun [GameManager.Instance.gunIndex].SetActive (false);
-			gun [GameManager.Instance.gunIndex + 1].SetActive (true);
-			GameManager.Instance.gunIndex = 2;
-		}		else if (GameManager.Instance.gunIndex == 2) {
-			gun [GameManager.Instance.gunIndex - 1].SetActive (false);
-			gun [GameManager.Instance.gunIndex].SetActive (false);
-			gun [GameManager.Instance.gunIndex - 2].SetActive (true);
-			GameManager.Instance.gunIndex = 0;
-		}
-			
-
-	}
+    public void ChangeGun()
+    {
+        if (GameManager.Instance.gunIndex == 0)
+        {
+            gun[GameManager.Instance.gunIndex + 2].SetActive(false);
+            gun[GameManager.Instance.gunIndex].SetActive(false);
+            gun[GameManager.Instance.gunIndex + 1].SetActive(true);
+            GameManager.Instance.gunIndex = 1;
+            gunImages[0].GetComponent<Image>().enabled = false;
+            gunImages[1].GetComponent<Image>().enabled = false;
+            gunImages[2].GetComponent<Image>().enabled = true;
+        }
+        else if (GameManager.Instance.gunIndex == 1)
+        {
+            gun[GameManager.Instance.gunIndex - 1].SetActive(false);
+            gun[GameManager.Instance.gunIndex].SetActive(false);
+            gun[GameManager.Instance.gunIndex + 1].SetActive(true);
+            GameManager.Instance.gunIndex = 2;
+            gunImages[0].GetComponent<Image>().enabled = true;
+            gunImages[1].GetComponent<Image>().enabled = false;
+            gunImages[2].GetComponent<Image>().enabled = false;
+        }
+        else if (GameManager.Instance.gunIndex == 2)
+        {
+            gun[GameManager.Instance.gunIndex - 1].SetActive(false);
+            gun[GameManager.Instance.gunIndex].SetActive(false);
+            gun[GameManager.Instance.gunIndex - 2].SetActive(true);
+            GameManager.Instance.gunIndex = 0;
+            gunImages[0].GetComponent<Image>().enabled = false;
+            gunImages[1].GetComponent<Image>().enabled = true;
+            gunImages[2].GetComponent<Image>().enabled = false;
+        }
+    }
 }
